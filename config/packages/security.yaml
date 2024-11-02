@@ -28,7 +28,9 @@ security:
             pattern: ^/api/
             stateless: true
             jwt: ~
-            provider: api_user_provider
+            # provider: api_user_provider
+            # jwt:
+            #     authenticator: app.custom_authenticator
 
         # main:
         #     lazy: true
