@@ -8,23 +8,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 #[Route('/api')]
 class ModuleController extends AbstractController
 {
     #[Route('/modules', name: 'app_module')]
-    public function index(EntityManagerInterface $em): JsonResponse
-    {
+    public function index(
+        EntityManagerInterface $em,
+    ): JsonResponse {
+
         $modules = $em->getRepository(Module::class)->findAll();
 
-        $prepare = [];
-        foreach ($modules as $module) {
-            $prepare[] = ["title" => $module->getTitle(), "description" => $module->getDescription()];
-        }
-
-        return $this->json([
-            'firstName' => $this->getUser()->getFirstname(),
-            'modules' =>$prepare
-        ]);
+        return $this->json($modules, context: ['groups' => ["show_modules"]]);
     }
 }
